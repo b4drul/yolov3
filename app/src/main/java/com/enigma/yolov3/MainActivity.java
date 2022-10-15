@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.SurfaceView;
+import android.view.View;
 import android.widget.Toast;
 
 import org.opencv.android.BaseLoaderCallback;
@@ -21,6 +22,7 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
     BaseLoaderCallback baseLoaderCallback;
     int counter = 0;
 
+    boolean startCanny = false;
 
     private static String TAG = "MainActivity";
     static{
@@ -31,7 +33,19 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
         }
     }
 
-    @Override
+    public void Canny(View Button) {
+
+        if (startCanny == false) {
+            startCanny = true;
+        } else {
+
+            startCanny = false;
+
+
+        }
+    }
+
+        @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -67,17 +81,26 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
     @Override
     public Mat onCameraFrame(CameraBridgeViewBase.CvCameraViewFrame inputFrame) {
 
+//        Mat frame = inputFrame.rgba();
+//
+//        if (counter % 2 == 0){
+//
+//            Core.flip(frame, frame, 1);
+//            Imgproc.cvtColor(frame, frame, Imgproc.COLOR_RGBA2GRAY);
+//
+//
+//        }
+//
+//        counter = counter + 1;
+
         Mat frame = inputFrame.rgba();
 
-        if (counter % 2 == 0){
+        if (startCanny == true) {
 
-            Core.flip(frame, frame, 1);
             Imgproc.cvtColor(frame, frame, Imgproc.COLOR_RGBA2GRAY);
-
+            Imgproc.Canny(frame, frame, 100, 80);
 
         }
-
-        counter = counter + 1;
 
 
 
